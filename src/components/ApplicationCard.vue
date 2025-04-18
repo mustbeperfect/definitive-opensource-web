@@ -3,21 +3,56 @@
   <div class="hybrid rounded-lg">
 
     <div class="flex justify-between px-5 py-4 items-center">
-      <a :href="application.homepage_url" target="_blank" class="text-gray-200 font-semibold text-lg">{{ application.name }}</a>
-      <div v-if="application.tags.length" class="flex gap-2">
-        <span
-            v-for="tagId in application.tags"
-            :key="tagId"
-            class="tag-emoji"
-        >
-          {{ getTagEmoji(tagId) }}
-        </span>
+      <div class="text-gray-200 font-semibold text-lg">{{ application.name }}</div>
+      <div class="flex gap-3">
+        <div v-if="application.tags.length" class="flex gap-3">
+          <span
+              v-for="tagId in application.tags"
+              :key="tagId"
+              class="tag-emoji"
+          >
+            {{ getTagEmoji(tagId) }}
+          </span>
+          <div class="line-y"></div>
+        </div>
+        <a :href="application.repo_url" target="_blank">
+          <i class="bi bi-github text-gray8 text-md"></i>
+        </a>
+        <a :href="application.homepage_url" target="_blank">
+          <i class="bi bi-box-arrow-up-right text-gray8 text-md"></i>
+        </a>
       </div>
     </div>
 
     <div class="text-gray9 text-sm px-5 h-[62px] overflow-y-auto mb-4">{{ application.description }}</div>
     <div class="flex justify-between px-5 pb-4">
-      <div class="text-sm text-green-400">Updated: {{ application.last_commit }}</div>
+      <div class="flex justify-between w-full">
+        <div class="text-sm text-green-400">
+          Updated: {{ application.last_commit }}
+        </div>
+        <div class="flex text-sm text-gray8 gap-2">
+          <div
+              v-if="application.platforms.includes('cross')"
+              class="flex gap-2"
+          >
+            <i class="bi bi-microsoft"></i>
+            <i class="bi bi-apple"></i>
+            <i class="bi bi-ubuntu"></i>
+          </div>
+          <div v-if="application.platforms.includes('windows')">
+            <i class="bi bi-microsoft"></i>
+          </div>
+          <div v-if="application.platforms.includes('macos')">
+            <i class="bi bi-apple"></i>
+          </div>
+          <div v-if="application.platforms.includes('linux')">
+            <i class="bi bi-ubuntu"></i>
+          </div>
+          <div v-if="application.platforms.includes('selfhost')">
+            <i class="bi bi-hdd-rack"></i>
+          </div>
+        </div>
+      </div>
       <div class="flex text-sm text-gray8 gap-2">
         <div v-if="application.platforms.includes('Cross')" class="flex gap-2">
           <i class="bi bi-microsoft"></i>

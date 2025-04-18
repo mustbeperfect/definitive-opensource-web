@@ -22,6 +22,7 @@ export interface Category {
     name: string;
     id: string;
     description: string;
+    numApps: number;
 }
 
 export interface Subcategory {
@@ -29,6 +30,7 @@ export interface Subcategory {
     id: string;
     parent: string;
     description: string;
+    numApps: number;
 }
 
 export interface CategoriesData {

@@ -1,5 +1,11 @@
 <template>
 
+  <header class="h-[55px] flex items-center justify-center bg-black">
+    <div class="text-sm tracking-wide text-gray9">This site is still in early <span class="text-white">alpha.</span>. Expect <span class="text-white">major glitches.</span></div>
+  </header>
+
+  <div class="line-x"></div>
+
   <nav class="h-[55px] bg-black flex flex-row justify-between items-center px-10">
     <div class="flex flex-row items-center gap-10">
       <div class="text-lg font-semibold text-gray-300">definitive-os</div>

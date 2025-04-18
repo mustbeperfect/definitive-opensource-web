@@ -12,14 +12,14 @@
             :class="{ active: selectedCategoryId === category.id }"
             class="text-xs text-gray9 mb-3"
         >
-          <div class="flex justify-between">
+          <div class="flex justify-between cursor-pointer">
             <div class="flex gap-3">
               <input id="default-checkbox" type="checkbox" value="" class="appearance-none size-4 border border-gray9 bg-gray3 rounded-sm checked:bg-white">
               <div>{{ category.name }}</div>
             </div>
-            <div class="px-1  bg-gray3 rounded-sm text-[10px] text-gray-300">20</div>
+            <div class="w-6 flex items-center justify-center  bg-gray3 rounded-sm text-[10px] text-gray-300">{{ category.numApps}}</div>
           </div>
-          <ul v-if="selectedCategoryId === category.id" class="py-2">
+          <ul v-if="selectedCategoryId === category.id" class="py-2 cursor-pointer">
             <li
                 v-for="subcategory in getSubcategoriesForCategory(category.id)"
                 :key="subcategory.id"
@@ -27,7 +27,7 @@
                 :class="{ active: selectedSubcategoryId === subcategory.id }"
                 class="ml-2 mb-2"
             >
-              {{ subcategory.name }}
+              {{ subcategory.name }} {{ subcategory.numApps}}
             </li>
           </ul>
         </li>
@@ -56,7 +56,7 @@ const selectedCategoryId = ref<string | null>(null);
 const selectedSubcategoryId = ref<string | null>(null);
 
 const getSubcategoriesForCategory = (categoryId: string): Subcategory[] => {
-  return props.subcategories.filter(sub => sub.parent === categoryId);
+  return props.subcategories?.filter(sub => sub.parent === categoryId) ?? [];
 };
 
 const selectCategory = (categoryId: string) => {
@@ -84,6 +84,5 @@ const selectSubcategory = (subcategoryId: string) => {
     emit('filter', selectedCategoryId.value, subcategoryId);
   }
 };
-
 
 </script>

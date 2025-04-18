@@ -72,7 +72,50 @@ export const useData = () => {
         error.value = null;
 
         try {
-            await Promise.all([fetchApplications(), fetchCategories(), fetchTags()]);
+            const [appsData, categoriesData, tagsData] = await Promise.all([
+                fetchApplications(),
+                fetchCategories(),
+                fetchTags()
+            ]);
+
+            const appCountsBySubcategory: Record<string, number> = {};
+
+            // Count apps for each subcategory
+            for (const app of appsData.applications || []) {
+                if (!appCountsBySubcategory[app.category]) {
+                    appCountsBySubcategory[app.category] = 0;
+                }
+                appCountsBySubcategory[app.category]++;
+            }
+
+            // Add numApps to subcategories
+            subcategories.value = (categoriesData.subcategories || []).map(subcat => ({
+                ...subcat,
+                numApps: appCountsBySubcategory[subcat.id] || 0
+            }));
+
+            // Build a map from subcategory ID to parent category ID
+            const subcategoryToCategory: Record<string, string> = {};
+            for (const subcat of subcategories.value) {
+                subcategoryToCategory[subcat.id] = subcat.parent;
+            }
+
+            // Sum subcategory counts into parent categories
+            const categoryAppCounts: Record<string, number> = {};
+            for (const subcat of subcategories.value) {
+                const parent = subcat.parent;
+                if (!categoryAppCounts[parent]) {
+                    categoryAppCounts[parent] = 0;
+                }
+                categoryAppCounts[parent] += subcat.numApps;
+            }
+
+            // Add numApps to categories
+            categories.value = (categoriesData.categories || []).map(cat => ({
+                ...cat,
+                numApps: categoryAppCounts[cat.id] || 0
+            }));
+
         } catch (err) {
             console.error('Error in fetchData:', err);
             error.value = err instanceof Error ? err.message : 'Unknown error fetching data';
@@ -80,6 +123,7 @@ export const useData = () => {
             loading.value = false;
         }
     };
+
 
     const getTagEmoji = (tagId: string): string => {
         return tagsMap.value[tagId]?.emoji || tagId;
