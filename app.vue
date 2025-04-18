@@ -27,7 +27,7 @@
 
   <div class="line-x"></div>
 
-  <div class="bg-black flex flex-col py-20 items-center justify-center gap-6 px-10">
+  <div class="bg-black flex flex-col py-20 items-center justify-center gap-6 px-4">
     <div class="border border-gray2 rounded-md py-2 px-3 flex flex-row gap-2 items-center justify-center">
       <div class="rounded-full size-2 bg-green-500"></div>
       <div class="text-xs font-medium text-gray-300">Updated Today</div>
@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <main class="flex items-center justify-center bg-black px-10">
+  <main class="flex items-center justify-center bg-black px-4">
     <div class="w-5xl bg-black flex gap-5">
       <div class="w-3xs hybrid rounded-lg h-full sticky top-5 hidden md:flex md:flex-col">
         <div class="px-3 py-2 text-gray9 text-xs font-medium">Categories</div>
