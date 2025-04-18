@@ -13,6 +13,10 @@
     --color-gray9: #999999;
 }
 
+html {
+    background-color: black;
+}
+
 .line-x {
     @apply h-px bg-gray2;
 }

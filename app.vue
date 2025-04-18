@@ -48,7 +48,7 @@
       <div class="w-3xs hybrid rounded-lg h-full sticky top-5 hidden md:flex md:flex-col">
         <div class="px-3 py-2 text-gray9 text-xs font-medium">Categories</div>
         <div class="line-x"></div>
-        <div class="flex flex-col p-3 gap-2">
+        <div class="flex flex-col px-3 pt-3 gap-2">
           <CategorySidebar
               :categories="categories"
               :subcategories="subcategories"
