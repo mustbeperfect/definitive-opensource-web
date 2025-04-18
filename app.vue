@@ -1,7 +1,7 @@
 <template>
 
   <header class="h-[55px] flex items-center justify-center bg-black">
-    <div class="text-sm tracking-wide text-gray9">This site is still in early <span class="text-white">alpha.</span>. Expect <span class="text-white">major glitches.</span></div>
+    <div class="text-sm tracking-wide text-gray9">This site is still in early <span class="text-white">alpha.</span>. Expect <span class="text-white">major</span> glitches.</div>
   </header>
 
   <div class="line-x"></div>
@@ -11,17 +11,17 @@
       <div class="text-lg font-semibold text-gray-300">definitive-os</div>
       <div class="line-y h-[55px]"></div>
       <div class="flex flex-row gap-5">
-        <div class="nav-item">Submit</div>
-        <div class="nav-item">Contributing</div>
-        <div class="nav-item">Security</div>
-        <div class="nav-item">Backlog</div>
+        <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/.github/GUIDELINES.md" class="nav-item">Submit</a>
+        <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/.github/CONTRIBUTING.md" class="nav-item">Contributing</a>
+        <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/.github/SECURITY.md" class="nav-item">Security</a>
+        <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/resources/dev/BACKLOG.md" class="nav-item">Backlog</a>
       </div>
     </div>
     <div class="flex items-center gap-4">
       <i class="bi bi-discord nav-item"></i>
       <i class="bi bi-search nav-item"></i>
-      <div class="sm-button-outline">Log In</div>
-      <div class="sm-button-fill">Sign Up</div>
+      <a class="sm-button-outline">Log In</a>
+      <a class="sm-button-fill">Sign Up</a>
     </div>
   </nav>
 
@@ -35,11 +35,11 @@
     <div class="text-gray-200 font-bold text-5xl text-center">Your Gateway to Open Source</div>
     <div class="text-gray9 text-xl tracking-wide text-center">A tool to find the best open source software.</div>
     <div class="flex flex-row gap-3">
-      <div class="button-hybrid">Portal</div>
-      <div class="button-outline gap-2">
+      <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/resources/PORTAL.md" class="button-hybrid">Portal</a>
+      <a href="https://github.com/mustbeperfect/definitive-opensource" class="button-outline gap-2">
         <i class="bi bi-github"></i>
         <div>GitHub</div>
-      </div>
+      </a>
     </div>
   </div>
 
