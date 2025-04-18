@@ -1,0 +1,68 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@import "tailwindcss";
+
+@theme {
+    --color-gray1: #111111;
+    --color-gray2: #222222;
+    --color-gray3: #333333;
+    --color-gray4: #444444;
+    --color-gray5: #555555;
+    --color-gray6: #666666;
+    --color-gray7: #777777;
+    --color-gray8: #888888;
+    --color-gray9: #999999;
+}
+
+.line-x {
+    @apply h-px bg-gray2;
+}
+
+.line-y {
+    @apply w-px bg-gray2;
+}
+
+/* Color Schemes */
+
+.outline {
+    @apply border-gray2 border;
+}
+
+.hybrid {
+    @apply border-gray2 border bg-gray1;
+}
+
+.fill {
+    @apply bg-gray1;
+}
+
+/* Full Components */
+
+.button-fill {
+    @apply  bg-white text-sm rounded-lg px-8 h-10 flex items-center font-semibold tracking-wide text-black cursor-pointer transition duration-500 ease-in-out hover:bg-white hover:text-black hover:border-white;
+}
+
+.button-hybrid {
+    @apply border-gray2 border bg-gray1 text-sm rounded-lg px-8 h-10 flex items-center font-semibold tracking-wide text-gray9 cursor-pointer transition duration-500 ease-in-out hover:bg-white hover:text-black hover:border-white;
+}
+
+.button-outline {
+    @apply border-gray2 border text-sm rounded-lg px-8 h-10 flex items-center font-semibold tracking-wide text-gray9 cursor-pointer transition duration-500 ease-in-out hover:bg-white hover:text-black hover:border-white;
+}
+
+.sm-button-fill {
+    @apply  bg-white text-xs rounded-lg px-3 h-7 flex items-center font-semibold tracking-wide text-black cursor-pointer transition duration-500 ease-in-out hover:bg-green-400;
+}
+
+.sm-button-outline {
+    @apply border-gray2 border text-xs rounded-lg px-3 h-7 flex items-center font-semibold tracking-wide text-gray9 cursor-pointer transition duration-500 ease-in-out hover:bg-white hover:text-black hover:border-white;
+}
+
+.nav-item {
+    @apply text-sm tracking-wide text-gray9 transition duration-500 ease-in-out hover:text-white cursor-pointer;
+}
+
+
+
+
+
+
