@@ -9,15 +9,15 @@
   <nav class="h-[55px] bg-black flex flex-row justify-between items-center px-10">
     <div class="flex flex-row items-center gap-10">
       <div class="text-lg font-semibold text-gray-300">definitive-os</div>
-      <div class="line-y h-[55px]"></div>
-      <div class="flex flex-row gap-5">
+      <div class="line-y h-[55px] md:flex hidden"></div>
+      <div class="md:flex hidden flex-row gap-5">
         <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/.github/GUIDELINES.md" class="nav-item">Submit</a>
         <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/.github/CONTRIBUTING.md" class="nav-item">Contributing</a>
         <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/.github/SECURITY.md" class="nav-item">Security</a>
         <a href="https://github.com/mustbeperfect/definitive-opensource/blob/main/resources/dev/BACKLOG.md" class="nav-item">Backlog</a>
       </div>
     </div>
-    <div class="flex items-center gap-4">
+    <div class="md:flex hidden items-center gap-4">
       <i class="bi bi-discord nav-item"></i>
       <i class="bi bi-search nav-item"></i>
       <a class="sm-button-outline">Log In</a>
