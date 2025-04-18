@@ -1,7 +1,7 @@
 <template>
 
   <header class="h-[55px] flex items-center justify-center bg-black">
-    <div class="text-sm tracking-wide text-gray9">This site is still in early <span class="text-white">alpha.</span>. Expect <span class="text-white">major</span> glitches.</div>
+    <div class="text-sm tracking-wide text-gray9">This site is still in early <span class="text-white">alpha.</span></div>
   </header>
 
   <div class="line-x"></div>
