@@ -18,11 +18,11 @@ html {
 }
 
 .line-x {
-    @apply h-px bg-gray2;
+    @apply min-h-px bg-gray2;
 }
 
 .line-y {
-    @apply w-px bg-gray2;
+    @apply min-w-px bg-gray2;
 }
 
 /* Color Schemes */

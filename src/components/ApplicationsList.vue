@@ -20,25 +20,79 @@ import {getLanguageColor} from "~/src/utils/languageColors";
 
 const props = defineProps<{
   applications: Application[];
-  selectedCategoryId: string | null;
-  selectedSubcategoryId: string | null;
+  subcategories: Subcategory[];
+  selectedCategoryId: string[];
+  selectedSubcategoryId: string[];
+  selectedPlatformId: string[];
+  selectedLicenseId: string[];
+  searchText: string;
+  sortOption: string;
   loading: boolean;
   error: string | null;
   getTagEmoji: (tagId: string) => string;
 }>();
 
 const filteredApplications = computed(() => {
-  if (!props.selectedCategoryId && !props.selectedSubcategoryId) {
-    return props.applications;
+  let filtered = props.applications;
+
+  // Filter by subcategory (if any selected)
+  if (props.selectedSubcategoryId.length > 0) {
+    filtered = filtered.filter(app => 
+      props.selectedSubcategoryId.some(subcatId => app.category === subcatId)
+    );
+  } 
+  // Filter by category (if any selected and no matching subcategories)
+  else if (props.selectedCategoryId.length > 0) {
+    // Get all subcategories for the selected categories
+    const subcatIds = props.selectedCategoryId.flatMap(catId => 
+      props.subcategories?.filter(sub => sub.parent === catId).map(sub => sub.id) || []
+    );
+
+    filtered = filtered.filter(app => 
+      // Match if app's category is in the selected subcategories
+      subcatIds.includes(app.category)
+    );
   }
 
-  if (props.selectedSubcategoryId) {
-    return props.applications.filter(app => app.category === props.selectedSubcategoryId);
+  // Filter by platform (if any selected)
+  if (props.selectedPlatformId.length > 0) {
+    filtered = filtered.filter(app => 
+      // App must have at least one platform that matches one of the selected platforms
+      app.platforms.some(platform => props.selectedPlatformId.includes(platform))
+    );
   }
 
-  return props.applications.filter(app => {
-    return app.category.includes(props.selectedCategoryId || '');
-  });
+  // Filter by license (if any selected)
+  if (props.selectedLicenseId.length > 0) {
+    filtered = filtered.filter(app => 
+      props.selectedLicenseId.includes(app.license)
+    );
+  }
+
+  // Filter by search text
+  if (props.searchText.trim()) {
+    const searchLower = props.searchText.toLowerCase().trim();
+    filtered = filtered.filter(app => 
+      app.name.toLowerCase().includes(searchLower)
+    );
+  }
+
+  // Sort applications based on sortOption
+  switch (props.sortOption) {
+    case 'stars':
+      filtered = [...filtered].sort((a, b) => b.stars - a.stars);
+      break;
+    case 'name_asc':
+      filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 'name_desc':
+      filtered = [...filtered].sort((a, b) => b.name.localeCompare(a.name));
+      break;
+    case 'updated':
+      filtered = [...filtered].sort((a, b) => new Date(b.last_commit).getTime() - new Date(a.last_commit).getTime());
+      break;
+  }
+
+  return filtered;
 });
 </script>
-

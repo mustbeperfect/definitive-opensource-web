@@ -47,3 +47,23 @@ export interface Tag {
 export interface TagsData {
     tags: Tag[];
 }
+
+export interface Platform {
+    name: string;
+    id: string;
+    numApps: number;
+}
+
+export interface PlatformsData {
+    platforms: Platform[];
+}
+
+export interface License {
+    name: string;
+    id: string;
+    numApps: number;
+}
+
+export interface LicensesData {
+    licenses: License[];
+}

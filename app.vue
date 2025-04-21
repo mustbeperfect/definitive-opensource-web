@@ -45,31 +45,51 @@
 
   <main class="flex items-center justify-center bg-black px-4">
     <div class="w-5xl bg-black flex gap-5">
-      <div class="w-3xs hybrid rounded-lg h-full sticky top-5 hidden md:flex md:flex-col">
-        <div class="px-3 py-2 text-gray9 text-xs font-medium">Categories</div>
-        <div class="line-x"></div>
-        <div class="flex flex-col px-3 pt-3 gap-2">
-          <CategorySidebar
-              :categories="categories"
-              :subcategories="subcategories"
-              :loading="loading"
-              :error="error"
-              @filter="handleFilter"
-          />
-        </div>
-      </div>
+
+      <FiltersSidebar
+          :categories="categories"
+          :applications="applications"
+          :subcategories="subcategories"
+          :platforms="platforms"
+          :licenses="licenses"
+          :loading="loading"
+          :error="error"
+          @filter="handleFilter"
+      />
+
       <div class="flex flex-col gap-5 md:w-[calc(100%-276px)] w-full">
         <div class="flex gap-3 w-full">
-          <input type="text" id="first_name" class="border-gray2 border text-gray7 text-sm px-6 h-10 placeholder-gray7 rounded-lg focus:outline-none w-full" placeholder="Search">
-          <div class="hybrid text-gray7 flex justify-between px-5 h-10 w-50 rounded-lg items-center">
-            <div class="text-sm">Order</div>
-            <i class="bi bi-arrows-expand"></i>
+          <input type="text" v-model="searchText" class="border-gray2 border text-gray7 text-sm px-6 h-10 placeholder-gray7 rounded-lg focus:outline-none w-full" placeholder="Search">
+          <div class="relative">
+            <div @click="toggleSortDropdown" class="hybrid text-gray7 flex justify-between px-5 h-10 w-50 rounded-lg items-center cursor-pointer">
+              <div class="text-sm">{{ getSortLabel(sortOption) }}</div>
+              <i class="bi" :class="showSortDropdown ? 'bi-arrows-collapse' : 'bi-arrows-expand'"></i>
+            </div>
+            <div v-if="showSortDropdown" class="absolute top-full right-0 mt-1 w-48 bg-gray-800 border border-gray2 rounded-lg shadow-lg z-10">
+              <div @click="setSortOption('stars')" class="px-4 py-2 text-sm text-gray7 hover:bg-gray-700 cursor-pointer rounded-t-lg" :class="{ 'bg-gray-700': sortOption === 'stars' }">
+                Most Stars
+              </div>
+              <div @click="setSortOption('name_asc')" class="px-4 py-2 text-sm text-gray7 hover:bg-gray-700 cursor-pointer" :class="{ 'bg-gray-700': sortOption === 'name_asc' }">
+                A-Z
+              </div>
+              <div @click="setSortOption('name_desc')" class="px-4 py-2 text-sm text-gray7 hover:bg-gray-700 cursor-pointer" :class="{ 'bg-gray-700': sortOption === 'name_desc' }">
+                Z-A
+              </div>
+              <div @click="setSortOption('updated')" class="px-4 py-2 text-sm text-gray7 hover:bg-gray-700 cursor-pointer rounded-b-lg" :class="{ 'bg-gray-700': sortOption === 'updated' }">
+                Recently Updated
+              </div>
+            </div>
           </div>
         </div>
         <ApplicationsList
             :applications="applications"
+            :subcategories="subcategories"
             :selectedCategoryId="selectedCategoryId"
             :selectedSubcategoryId="selectedSubcategoryId"
+            :selectedPlatformId="selectedPlatformId"
+            :selectedLicenseId="selectedLicenseId"
+            :searchText="searchText"
+            :sortOption="sortOption"
             :getTagEmoji="getTagEmoji"
             :loading="loading"
             :error="error"
@@ -90,24 +110,52 @@
 import { ref, onMounted } from 'vue';
 import { useData } from '~/src/lib/useApplications';
 import ApplicationsList from "~/src/components/ApplicationsList.vue";
-import CategorySidebar from "~/src/components/CategorySidebar.vue";
+import FiltersSidebar from "~/src/components/FiltersSidebar.vue";
 
 const {
   applications,
   categories,
   subcategories,
+  platforms,
+  licenses,
   loading,
   error,
   fetchData,
   getTagEmoji
 } = useData();
 
-const selectedCategoryId = ref<string | null>(null);
-const selectedSubcategoryId = ref<string | null>(null);
+const selectedCategoryId = ref<string[]>([]);
+const selectedSubcategoryId = ref<string[]>([]);
+const selectedPlatformId = ref<string[]>([]);
+const selectedLicenseId = ref<string[]>([]);
+const searchText = ref<string>('');
+const sortOption = ref<string>('stars');
+const showSortDropdown = ref<boolean>(false);
 
-const handleFilter = (categoryId: string | null, subcategoryId: string | null) => {
-  selectedCategoryId.value = categoryId;
-  selectedSubcategoryId.value = subcategoryId;
+const handleFilter = (categoryIds: string[], subcategoryIds: string[], platformIds: string[], licenseIds: string[]) => {
+  selectedCategoryId.value = categoryIds;
+  selectedSubcategoryId.value = subcategoryIds;
+  selectedPlatformId.value = platformIds;
+  selectedLicenseId.value = licenseIds;
+};
+
+const toggleSortDropdown = () => {
+  showSortDropdown.value = !showSortDropdown.value;
+};
+
+const setSortOption = (option: string) => {
+  sortOption.value = option;
+  showSortDropdown.value = false;
+};
+
+const getSortLabel = (option: string): string => {
+  switch (option) {
+    case 'stars': return 'Most Stars';
+    case 'name_asc': return 'A-Z';
+    case 'name_desc': return 'Z-A';
+    case 'updated': return 'Recently Updated';
+    default: return 'Order';
+  }
 };
 
 onMounted(() => {
