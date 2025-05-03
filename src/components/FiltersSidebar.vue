@@ -101,12 +101,39 @@
       </ul>
     </div>
 
+    <div class="line-x"></div>
+    <div class="px-3 text-gray9 text-xs font-medium">Tags</div>
+    <div class="line-x"></div>
+
+    <div class="flex flex-col gap-2">
+      <ul class="px-3">
+        <li
+            v-for="tag in tags"
+            :key="tag.id"
+            @click="selectTag(tag.id)"
+            :class="{ active: selectedTagIds.includes(tag.id) }"
+            class="text-xs text-gray9 mb-3 mt-1"
+        >
+          <div class="flex justify-between cursor-pointer">
+            <div class="flex gap-3">
+              <input
+                  type="checkbox"
+                  :checked="selectedTagIds.includes(tag.id)"
+                  class="appearance-none size-4 border border-gray9 bg-gray3 rounded-sm checked:bg-white">
+              <div>{{ tag.emoji ? `${tag.emoji} ` : '' }}{{ tag.name || tag.description }}</div>
+            </div>
+            <div class="w-6 flex items-center justify-center  bg-gray3 rounded-sm text-[10px] text-gray-300">{{ tag.numApps || 0 }}</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import type { Category, Subcategory, Application, Platform, License } from '~/src/types/Application';
+import type { Category, Subcategory, Application, Platform, License, Tag } from '~/src/types/Application';
 
 const props = defineProps<{
   applications: Application[];
@@ -114,18 +141,20 @@ const props = defineProps<{
   subcategories: Subcategory[];
   platforms: Platform[];
   licenses: License[];
+  tags: Tag[];
   loading: boolean;
   error: string | null;
 }>();
 
 const emit = defineEmits<{
-  (e: 'filter', categoryIds: string[], subcategoryIds: string[], platformIds: string[], licenseIds: string[]): void;
+  (e: 'filter', categoryIds: string[], subcategoryIds: string[], platformIds: string[], licenseIds: string[], tagIds: string[]): void;
 }>();
 
 const selectedCategoryIds = ref<string[]>([]);
 const selectedSubcategoryIds = ref<string[]>([]);
 const selectedPlatformIds = ref<string[]>([]);
 const selectedLicenseIds = ref<string[]>([]);
+const selectedTagIds = ref<string[]>([]);
 
 const getSubcategoriesForCategory = (categoryId: string): Subcategory[] => {
   return props.subcategories?.filter(sub => sub.parent === categoryId) ?? [];
@@ -146,7 +175,7 @@ const selectCategory = (categoryId: string) => {
     selectedCategoryIds.value.push(categoryId);
   }
 
-  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value);
+  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value, selectedTagIds.value);
 };
 
 const getSubcategories = (categoryId: string): Subcategory[] => {
@@ -169,7 +198,7 @@ const selectSubcategory = (subcategoryId: string) => {
     }
   }
 
-  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value);
+  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value, selectedTagIds.value);
 };
 
 const selectPlatform = (platformId: string) => {
@@ -182,7 +211,7 @@ const selectPlatform = (platformId: string) => {
     selectedPlatformIds.value.push(platformId);
   }
 
-  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value);
+  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value, selectedTagIds.value);
 };
 
 const selectLicense = (licenseId: string) => {
@@ -195,7 +224,20 @@ const selectLicense = (licenseId: string) => {
     selectedLicenseIds.value.push(licenseId);
   }
 
-  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value);
+  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value, selectedTagIds.value);
+};
+
+const selectTag = (tagId: string) => {
+  const index = selectedTagIds.value.indexOf(tagId);
+  if (index !== -1) {
+    // Remove the tag if already selected
+    selectedTagIds.value.splice(index, 1);
+  } else {
+    // Add the tag if not already selected
+    selectedTagIds.value.push(tagId);
+  }
+
+  emit('filter', selectedCategoryIds.value, selectedSubcategoryIds.value, selectedPlatformIds.value, selectedLicenseIds.value, selectedTagIds.value);
 };
 
 </script>

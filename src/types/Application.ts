@@ -38,14 +38,29 @@ export interface CategoriesData {
     subcategories: Subcategory[];
 }
 
-export interface Tag {
+export interface AttributeTag {
     emoji: string;
     id: string;
     description: string;
 }
 
+export interface PropertyTag {
+    name: string;
+    id: string;
+}
+
+export interface Tag {
+    emoji: string;
+    id: string;
+    description: string;
+    isProperty?: boolean;
+    name?: string;
+    numApps?: number;
+}
+
 export interface TagsData {
-    tags: Tag[];
+    attributes: AttributeTag[];
+    properties: PropertyTag[];
 }
 
 export interface Platform {

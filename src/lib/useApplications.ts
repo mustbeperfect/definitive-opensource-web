@@ -54,10 +54,28 @@ export const useData = () => {
             const response = await fetch(`${GITHUB_RAW_URL}/source/data/tags.json`);
 
             const data: TagsData = await response.json();
-            tags.value = data.tags || [];
 
+            // Process attribute tags
+            const attributeTags = (data.attributes || []).map(tag => ({
+                ...tag,
+                isProperty: false
+            }));
+
+            // Process property tags
+            const propertyTags = (data.properties || []).map(tag => ({
+                id: tag.id,
+                name: tag.name,
+                emoji: '',
+                description: tag.name,
+                isProperty: true
+            }));
+
+            // Combine both types of tags
+            tags.value = [...attributeTags, ...propertyTags];
+
+            // Create a map for quick lookup
             const map: Record<string, Tag> = {};
-            data.tags.forEach(tag => {
+            tags.value.forEach(tag => {
                 map[tag.id] = tag;
             });
             tagsMap.value = map;
@@ -66,7 +84,7 @@ export const useData = () => {
         } catch (err) {
             console.error('Error fetching tags:', err);
             error.value = err instanceof Error ? err.message : 'Unknown error occurred';
-            return { tags: [] };
+            return { attributes: [], properties: [] };
         }
     };
 
@@ -159,6 +177,23 @@ export const useData = () => {
                 numApps: platformAppCounts[platform.id] || 0
             }));
 
+            // Count apps for each tag
+            const tagAppCounts: Record<string, number> = {};
+            for (const app of appsData.applications || []) {
+                for (const tagId of app.tags || []) {
+                    if (!tagAppCounts[tagId]) {
+                        tagAppCounts[tagId] = 0;
+                    }
+                    tagAppCounts[tagId]++;
+                }
+            }
+
+            // Add numApps to tags
+            tags.value = tags.value.map(tag => ({
+                ...tag,
+                numApps: tagAppCounts[tag.id] || 0
+            }));
+
             // Process licenses from applications
             const licenseMap: Record<string, number> = {};
             for (const app of appsData.applications || []) {
@@ -195,6 +230,7 @@ export const useData = () => {
         categories,
         subcategories,
         tags,
+        tagsMap,
         platforms,
         licenses,
         getTagEmoji,

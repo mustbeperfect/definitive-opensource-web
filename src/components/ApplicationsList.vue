@@ -6,7 +6,7 @@
     <div v-else-if="filteredApplications.length === 0">No applications found matching the selected filter.</div>
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-20">
       <div v-for="app in filteredApplications" :key="app.name">
-        <ApplicationCard :application="app" :getTagEmoji="getTagEmoji" :language="getLanguageColor" />
+        <ApplicationCard :application="app" :getTagEmoji="getTagEmoji" :language="getLanguageColor" :tagsMap="tagsMap" />
       </div>
     </div>
   </div>
@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Application } from '~/src/types/Application';
+import type { Application, Subcategory } from '~/src/types/Application';
 import ApplicationCard from '~/src/components/ApplicationCard.vue';
 import {getLanguageColor} from "~/src/utils/languageColors";
 
@@ -25,11 +25,13 @@ const props = defineProps<{
   selectedSubcategoryId: string[];
   selectedPlatformId: string[];
   selectedLicenseId: string[];
+  selectedTagId: string[];
   searchText: string;
   sortOption: string;
   loading: boolean;
   error: string | null;
   getTagEmoji: (tagId: string) => string;
+  tagsMap: Record<string, any>;
 }>();
 
 const filteredApplications = computed(() => {
@@ -66,6 +68,14 @@ const filteredApplications = computed(() => {
   if (props.selectedLicenseId.length > 0) {
     filtered = filtered.filter(app => 
       props.selectedLicenseId.includes(app.license)
+    );
+  }
+
+  // Filter by tags (if any selected)
+  if (props.selectedTagId.length > 0) {
+    filtered = filtered.filter(app => 
+      // App must have at least one tag that matches one of the selected tags
+      app.tags.some(tag => props.selectedTagId.includes(tag))
     );
   }
 

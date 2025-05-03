@@ -52,6 +52,7 @@
           :subcategories="subcategories"
           :platforms="platforms"
           :licenses="licenses"
+          :tags="tags"
           :loading="loading"
           :error="error"
           @filter="handleFilter"
@@ -88,11 +89,13 @@
             :selectedSubcategoryId="selectedSubcategoryId"
             :selectedPlatformId="selectedPlatformId"
             :selectedLicenseId="selectedLicenseId"
+            :selectedTagId="selectedTagId"
             :searchText="searchText"
             :sortOption="sortOption"
             :getTagEmoji="getTagEmoji"
             :loading="loading"
             :error="error"
+            :tagsMap="tagsMap"
         />
       </div>
     </div>
@@ -118,25 +121,29 @@ const {
   subcategories,
   platforms,
   licenses,
+  tags,
   loading,
   error,
   fetchData,
-  getTagEmoji
+  getTagEmoji,
+  tagsMap
 } = useData();
 
 const selectedCategoryId = ref<string[]>([]);
 const selectedSubcategoryId = ref<string[]>([]);
 const selectedPlatformId = ref<string[]>([]);
 const selectedLicenseId = ref<string[]>([]);
+const selectedTagId = ref<string[]>([]);
 const searchText = ref<string>('');
 const sortOption = ref<string>('stars');
 const showSortDropdown = ref<boolean>(false);
 
-const handleFilter = (categoryIds: string[], subcategoryIds: string[], platformIds: string[], licenseIds: string[]) => {
+const handleFilter = (categoryIds: string[], subcategoryIds: string[], platformIds: string[], licenseIds: string[], tagIds: string[]) => {
   selectedCategoryId.value = categoryIds;
   selectedSubcategoryId.value = subcategoryIds;
   selectedPlatformId.value = platformIds;
   selectedLicenseId.value = licenseIds;
+  selectedTagId.value = tagIds;
 };
 
 const toggleSortDropdown = () => {

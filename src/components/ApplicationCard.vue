@@ -9,9 +9,10 @@
           <span
               v-for="tagId in application.tags"
               :key="tagId"
-              class="tag-emoji"
+              :class="isPropertyTag(tagId) ? 'property-tag' : 'tag-emoji'"
           >
-            {{ getTagEmoji(tagId) }}
+            <template v-if="isPropertyTag(tagId)">{{ getTagName(tagId) }}</template>
+            <template v-else>{{ getTagEmoji(tagId) }}</template>
           </span>
           <div class="line-y"></div>
         </div>
@@ -32,44 +33,25 @@
         </div>
         <div class="flex text-sm text-gray8 gap-2">
           <div
-              v-if="application.platforms.includes('cross')"
+              v-if="application.platforms.includes('cross') || application.platforms.includes('Cross')"
               class="flex gap-2"
           >
             <i class="bi bi-microsoft"></i>
             <i class="bi bi-apple"></i>
             <i class="bi bi-ubuntu"></i>
           </div>
-          <div v-if="application.platforms.includes('windows')">
+          <div v-if="application.platforms.includes('windows') || application.platforms.includes('Windows')">
             <i class="bi bi-microsoft"></i>
           </div>
-          <div v-if="application.platforms.includes('macos')">
+          <div v-if="application.platforms.includes('macos') || application.platforms.includes('MacOS')">
             <i class="bi bi-apple"></i>
           </div>
-          <div v-if="application.platforms.includes('linux')">
+          <div v-if="application.platforms.includes('linux') || application.platforms.includes('Linux')">
             <i class="bi bi-ubuntu"></i>
           </div>
-          <div v-if="application.platforms.includes('selfhost')">
+          <div v-if="application.platforms.includes('selfhost') || application.platforms.includes('SelfHost')">
             <i class="bi bi-hdd-rack"></i>
           </div>
-        </div>
-      </div>
-      <div class="flex text-sm text-gray8 gap-2">
-        <div v-if="application.platforms.includes('Cross')" class="flex gap-2">
-          <i class="bi bi-microsoft"></i>
-          <i class="bi bi-apple"></i>
-          <i class="bi bi-ubuntu"></i>
-        </div>
-        <div v-if="application.platforms.includes('Windows')">
-          <i class="bi bi-microsoft"></i>
-        </div>
-        <div v-if="application.platforms.includes('MacOS')">
-          <i class="bi bi-apple"></i>
-        </div>
-        <div v-if="application.platforms.includes('Linux')">
-          <i class="bi bi-ubuntu"></i>
-        </div>
-        <div v-if="application.platforms.includes('SelfHost')">
-          <i class="bi bi-hdd-rack"></i>
         </div>
       </div>
     </div>
@@ -106,10 +88,31 @@ const props = defineProps<{
   language: string;
   getTagEmoji: (tagId: string) => string;
   application: Application;
+  tagsMap?: Record<string, any>;
 }>();
 
 const languageColor = computed(() => {
   return getLanguageColor(props.language);
 });
 
+const isPropertyTag = (tagId: string): boolean => {
+  return props.tagsMap?.[tagId]?.isProperty === true;
+};
+
+const getTagName = (tagId: string): string => {
+  return props.tagsMap?.[tagId]?.name || tagId;
+};
+
 </script>
+
+<style scoped>
+.property-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 0.75rem;
+  color: #e2e8f0;
+  margin-right: 4px;
+}
+</style>
